@@ -78,9 +78,9 @@ const Home = () => {
         </p>
       )}
       {noResults ? (
-        <Error searchTermCharacters={searchTermCharacters} />
+        <Error searchTermCharacters={searchTermCharacters || ""} />
       ) : (
-        <CardsList characters={characters} />
+        <CardsList characters={characters!} />
       )}
       {totalPages && (
         <div className="flex gap-2 my-4 justify-center items-baseline">
