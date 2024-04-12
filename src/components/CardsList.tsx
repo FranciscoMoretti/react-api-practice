@@ -1,6 +1,7 @@
+import { Character } from "../api-types";
 import Card from "../components/Card";
 
-const CardsList = ({ characters }) => {
+const CardsList = ({ characters }: { characters: Character[] }) => {
   const createCard = () => {
     return characters.map((character, id) => {
       return <Card key={id} character={character} />;

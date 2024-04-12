@@ -1,6 +1,7 @@
 import { Circle } from "react-feather";
+import { Character } from "../api-types";
 
-const getCaracterStatus = (status) => {
+const getCaracterStatus = (status: string) => {
   switch (status) {
     case "Alive":
       return <Circle size={15} color="green" fill="green" className="inline" />;
@@ -11,7 +12,7 @@ const getCaracterStatus = (status) => {
   }
 };
 
-const Card = ({ character }) => {
+const Card = ({ character }: { character: Character }) => {
   return (
     <li className=" border-2 border-black p-4 w-64 rounded-md">
       <h1 className=" text-xl font-bold">

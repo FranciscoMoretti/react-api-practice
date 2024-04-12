@@ -5,11 +5,11 @@ import Input from "./components/Input.tsx";
 import Button from "./components/Button.tsx";
 import CardsList from "./components/CardsList.tsx";
 import Error from "./components/Error.tsx";
-import { CharacterResult, Result } from "./api-types.tsx";
+import { CharacterResult, Character } from "./api-types.tsx";
 
 const Home = () => {
-  const [initData, setInitData] = useState<Result[]>();
-  const [characters, setCharacters] = useState<Result[]>();
+  const [initData, setInitData] = useState<Character[]>();
+  const [characters, setCharacters] = useState<Character[]>();
   const [searchTermCharacters, setSearchTermCharacters] = useState<string>();
   const [noResults, setNoResults] = useState(false);
   const [totalResults, setTotalResults] = useState<number>();

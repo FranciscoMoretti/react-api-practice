@@ -1,9 +1,9 @@
 export interface CharacterResult {
   info: Info;
-  results: Result[];
+  results: Character[];
 }
 
-export interface Result {
+export interface Character {
   id: number;
   name: string;
   status: string;
@@ -27,5 +27,5 @@ export interface Info {
   count: number;
   pages: number;
   next: string;
-  prev?: any;
+  prev?: string;
 }
