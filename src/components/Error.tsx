@@ -1,4 +1,4 @@
-const Error = ({ searchTermCharacters }) => {
+const Error = ({ searchTermCharacters }: { searchTermCharacters: string }) => {
   return (
     <p className=" text-xl bg-red-400 p-4 text-black font-bold">
       Ooops!! No result found for{" "}
