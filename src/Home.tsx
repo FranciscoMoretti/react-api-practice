@@ -35,7 +35,7 @@ const Home = () => {
     }
   };
 
-  const getChatacter = async (page = 1) => {
+  const getCharacter = async (page = 1) => {
     try {
       const data = await fetch(
         `https://rickandmortyapi.com/api/character?page=${page}`
@@ -51,12 +51,12 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getChatacter();
+    getCharacter();
   }, []);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
-    getChatacter(newPage);
+    getCharacter(newPage);
   };
 
   return (
