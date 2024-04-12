@@ -11,7 +11,6 @@ const Home = () => {
   const [initData, setInitData] = useState<Character[]>();
   const [characters, setCharacters] = useState<Character[]>();
   const [searchTermCharacters, setSearchTermCharacters] = useState<string>();
-  const [noResults, setNoResults] = useState(false);
   const [totalResults, setTotalResults] = useState<number>();
   const [totalPages, setTotalPages] = useState<number>();
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,10 +30,8 @@ const Home = () => {
         character.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setCharacters(searchResults);
-      setNoResults(searchResults.length === 0);
     } else {
       setCharacters(initData);
-      setNoResults(false);
     }
   };
 
@@ -76,7 +73,7 @@ const Home = () => {
           <span className=" font-black">{totalResults}</span>
         </p>
       )}
-      {noResults ? (
+      {characters && characters.length == 0 ? (
         <Error searchTermCharacters={searchTermCharacters || ""} />
       ) : (
         <CardsList characters={characters!} />
