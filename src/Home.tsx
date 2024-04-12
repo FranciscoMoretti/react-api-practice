@@ -5,22 +5,27 @@ import Input from "./components/Input.tsx";
 import Button from "./components/Button.tsx";
 import CardsList from "./components/CardsList.tsx";
 import Error from "./components/Error.tsx";
+import { CharacterResult, Result } from "./api-types.tsx";
 
 const Home = () => {
-  const [initData, setInitData] = useState();
-  const [characters, setCharacters] = useState();
-  const [searchTermCharacters, setSearchTermCharacters] = useState();
+  const [initData, setInitData] = useState<Result[]>();
+  const [characters, setCharacters] = useState<Result[]>();
+  const [searchTermCharacters, setSearchTermCharacters] = useState<string>();
   const [noResults, setNoResults] = useState(false);
-  const [totalResults, setTotalResults] = useState();
-  const [totalPages, setTotalPages] = useState();
+  const [totalResults, setTotalResults] = useState<number>();
+  const [totalPages, setTotalPages] = useState<number>();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const searchTerm = (e) => {
-    setSearchTermCharacters(e.target.value);
+  const searchTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTermCharacters(event.target.value);
     searchCharacters();
   };
 
   const searchCharacters = () => {
+    if (!initData) {
+      console.error("No data yet.");
+      return;
+    }
     if (searchTermCharacters) {
       const searchResults = initData.filter((character) =>
         character.name
@@ -39,7 +44,7 @@ const Home = () => {
       const data = await fetch(
         `https://rickandmortyapi.com/api/character?page=${page}`
       );
-      const response = await data.json();
+      const response = (await data.json()) as CharacterResult;
       setCharacters(response.results);
       setInitData(response.results);
       setTotalResults(response.info.count);
@@ -53,7 +58,7 @@ const Home = () => {
     getChatacter();
   }, []);
 
-  const handlePageChange = (newPage) => {
+  const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
     getChatacter(newPage);
   };
@@ -64,7 +69,7 @@ const Home = () => {
       <Input
         type="search"
         placeholder="type your character..."
-        changeHandeler={searchTerm}
+        changeHandler={searchTerm}
       />
       {totalResults && (
         <p className="mt-4 ">
