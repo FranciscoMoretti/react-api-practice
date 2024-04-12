@@ -17,25 +17,24 @@ const Home = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const searchTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTermCharacters(event.target.value);
-    searchCharacters();
+    setSearchTermCharacters(event.target.value || "");
+    searchCharacters(event.target.value);
   };
 
-  const searchCharacters = () => {
+  const searchCharacters = (searchTerm: string) => {
     if (!initData) {
       console.error("No data yet.");
       return;
     }
-    if (searchTermCharacters) {
+    if (searchTerm) {
       const searchResults = initData.filter((character) =>
-        character.name
-          .toLowerCase()
-          .includes(searchTermCharacters.toLowerCase())
+        character.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setCharacters(searchResults);
       setNoResults(searchResults.length === 0);
     } else {
       setCharacters(initData);
+      setNoResults(false);
     }
   };
 
