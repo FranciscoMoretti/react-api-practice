@@ -5,7 +5,11 @@ import Input from "./components/Input.tsx";
 import Button from "./components/Button.tsx";
 import CardsList from "./components/CardsList.tsx";
 import Error from "./components/Error.tsx";
-import { CharacterResult, Character } from "./api-types.tsx";
+import { Character, CharactersResult } from "./api-types.tsx";
+import CryptoJS from "crypto-js";
+import { useNavigate, useLocation } from "react-router";
+
+export const CHARS_PER_PAGE = 60;
 
 const Home = () => {
   const [initData, setInitData] = useState<Character[]>();
@@ -13,7 +17,19 @@ const Home = () => {
   const [searchTermCharacters, setSearchTermCharacters] = useState<string>();
   const [totalResults, setTotalResults] = useState<number>();
   const [totalPages, setTotalPages] = useState<number>();
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const pageNumber = new URLSearchParams(location.search).get("page");
+  const [currentPage, setCurrentPage] = useState(
+    pageNumber ? parseInt(pageNumber, 10) : 1
+  );
+
+  useEffect(() => {
+    navigate(`?page=${currentPage}`);
+    getCharacter(currentPage);
+  }, [currentPage]);
 
   const searchTerm = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTermCharacters(event.target.value || "");
@@ -36,23 +52,39 @@ const Home = () => {
   };
 
   const getCharacter = async (page = 1) => {
+    const timestamp = Date.now().toString();
+    const hash = CryptoJS.MD5(
+      timestamp +
+        import.meta.env.VITE_MARVEL_API_PRIVATE_KEY +
+        import.meta.env.VITE_MARVEL_API_PUBLIC_KEY
+    ).toString();
     try {
-      const data = await fetch(
-        `https://rickandmortyapi.com/api/character?page=${page}`
+      const url = new URL(
+        "https://gateway.marvel.com:443/v1/public/characters"
       );
-      const response = (await data.json()) as CharacterResult;
-      setCharacters(response.results);
-      setInitData(response.results);
-      setTotalResults(response.info.count);
-      setTotalPages(response.info.pages);
+      url.searchParams.append("limit", CHARS_PER_PAGE.toString());
+      url.searchParams.append(
+        "offset",
+        ((page - 1) * CHARS_PER_PAGE).toString()
+      );
+      url.searchParams.append(
+        "apikey",
+        import.meta.env.VITE_MARVEL_API_PUBLIC_KEY
+      );
+      url.searchParams.append("ts", timestamp);
+      url.searchParams.append("hash", hash);
+
+      const data = await fetch(url.toString());
+
+      const response = (await data.json()) as CharactersResult;
+      setCharacters(response.data.results);
+      setInitData(response.data.results);
+      setTotalResults(response.data.total);
+      setTotalPages(Math.ceil(response.data.total / CHARS_PER_PAGE));
     } catch (err) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    getCharacter();
-  }, []);
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);

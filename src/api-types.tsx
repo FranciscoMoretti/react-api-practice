@@ -1,31 +1,66 @@
-export interface CharacterResult {
-  info: Info;
+export interface CharactersResult {
+  code: number;
+  status: string;
+  copyright: string;
+  attributionText: string;
+  attributionHTML: string;
+  etag: string;
+  data: CharactersData;
+}
+
+export interface CharactersData {
+  offset: number;
+  limit: number;
+  total: number;
+  count: number;
   results: Character[];
 }
 
 export interface Character {
   id: number;
   name: string;
-  status: string;
-  species: string;
+  description: string;
+  modified: string;
+  thumbnail: Thumbnail;
+  resourceURI: string;
+  comics: Comics;
+  series: Comics;
+  stories: Stories;
+  events: Comics;
+  urls: Url[];
+}
+
+export interface Url {
   type: string;
-  gender: string;
-  origin: Origin;
-  location: Origin;
-  image: string;
-  episode: string[];
   url: string;
-  created: string;
 }
 
-export interface Origin {
+export interface Stories {
+  available: number;
+  collectionURI: string;
+  items: Item2[];
+  returned: number;
+}
+
+export interface Item2 {
+  resourceURI: string;
   name: string;
-  url: string;
+  type: string;
 }
 
-export interface Info {
-  count: number;
-  pages: number;
-  next: string;
-  prev?: string;
+export interface Comics {
+  available: number;
+  collectionURI: string;
+  items: Item[];
+  returned: number;
+}
+
+export interface Item {
+  resourceURI: string;
+  name: string;
+}
+
+export interface Thumbnail {
+  path: string;
+  extension: string;
 }

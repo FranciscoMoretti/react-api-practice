@@ -3,8 +3,8 @@ import Card from "../components/Card";
 
 const CardsList = ({ characters }: { characters: Character[] }) => {
   const createCard = () => {
-    return characters.map((character, id) => {
-      return <Card key={id} character={character} />;
+    return characters.map((character) => {
+      return <Card key={character.id} character={character} />;
     });
   };
 
